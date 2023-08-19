@@ -460,15 +460,19 @@ def gui_handler():
                 if keys[pygame.K_s]:  # s key
                     grid.set_start()
                     continue
+
                 if keys[pygame.K_e]:  # e key
                     grid.set_end()
                     continue
+
                 if keys[pygame.K_d]:  # d key
                     grid.unmark_obs()
                     continue
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_RETURN:  # Enter Key
-                    grid.start_algo()
-                    continue
+
+                if event.type == pygame.KEYDOWN:  # Enter Key
+                    if event.key in (pygame.K_RETURN, pygame.K_SPACE):
+                        grid.start_algo()
+                        continue
 
                 if keys[pygame.K_LCTRL] or keys[pygame.K_RCTRL]:    # CONTROL EVENTS ..................
                     if keys[pygame.K_r]:

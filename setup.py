@@ -14,12 +14,12 @@ base = "Win32GUI"
 visualizer_pygame = Executable(script='Visualizer_Pygame.py',
                                icon=os.path.join(main_dir, 'icons\\path_finder.ico'),
                                base=base,
-                               targetName='Path Finder (Pygame)')
+                               target_name='Path Finder (Pygame)')
 
 visualizer_tk = Executable(script='Visualizer_Tk.py',
                                icon=os.path.join(main_dir, 'icons\\path_finder.ico'),
                                base=base,
-                               targetName='Path Finder (TK)')
+                               target_name='Path Finder (TK)')
 
 setup(name="RC PATH FINDER",
       version="1.0.0",
