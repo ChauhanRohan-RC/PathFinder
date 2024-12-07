@@ -27,7 +27,7 @@ class Node:
     _InSideLength = Config.InSideLength
 
     # COLORS ..............................................
-    OutNormalColor = Config.OutNormalColor            # Normal Outline Colour
+    OutNormalColor = Config.OutNormalColor()            # Normal Outline Colour
 
     NormalFill = Config.NormalFill                    # Fill when Normal
     StartFill = Config.StartFill                      # Fill when Marked As Start

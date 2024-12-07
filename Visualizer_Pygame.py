@@ -5,7 +5,6 @@ from threading import Thread
 from Config import Config
 import time
 
-
 # Initialising Pygame
 pygame.init()
 pygame.display.init()
@@ -16,26 +15,26 @@ Config.load_from_file(Config.ConfigFilePath)
 
 
 class Node:
-    Surface = None                               # Should be Grid Surface
+    Surface = None  # Should be Grid Surface
 
     # DIMENSIONS .......................................
-    SideLength = Config.SideLength                    # Pixels
+    SideLength = Config.SideLength  # Pixels
     Diagonal = Config.Diagonal
     OutWidth = Config.OutWidth
 
     _InSideLength = Config.InSideLength
 
     # COLORS ..............................................
-    OutNormalColor = Config.OutNormalColor            # Normal Outline Colour
+    OutNormalColor = Config.OutNormalColor()  # Normal Outline Colour
 
-    NormalFill = Config.NormalFill                    # Fill when Normal
-    StartFill = Config.StartFill                      # Fill when Marked As Start
-    EndFill = Config.EndFill                          # Fill when Marked As End
-    ObsFill = Config.ObsFill                          # Fill when Marked as Obstacle
+    NormalFill = Config.NormalFill()  # Fill when Normal
+    StartFill = Config.StartFill()  # Fill when Marked As Start
+    EndFill = Config.EndFill()  # Fill when Marked As End
+    ObsFill = Config.ObsFill()  # Fill when Marked as Obstacle
 
-    ClosedFill = Config.ClosedFill                    # Fill when marked as closed
-    OpenFill = Config.OpenFill                        # Fill when marked as open
-    PathFill = Config.PathFill                        # Fill when marked as Found PAth
+    ClosedFill = Config.ClosedFill()  # Fill when marked as closed
+    OpenFill = Config.OpenFill()  # Fill when marked as open
+    PathFill = Config.PathFill()  # Fill when marked as Found PAth
 
     @classmethod
     def set_surface(cls, _surface):
@@ -53,7 +52,8 @@ class Node:
     def draw(self):
         # MAin Rect
         pygame.draw.rect(self.__class__.Surface, self.c_color,
-                         (self.x + self.__class__.OutWidth, self.y + self.__class__.OutWidth, self.__class__._InSideLength, self.__class__._InSideLength), 0)
+                         (self.x + self.__class__.OutWidth, self.y + self.__class__.OutWidth,
+                          self.__class__._InSideLength, self.__class__._InSideLength), 0)
 
     @property
     def x(self):
@@ -92,7 +92,8 @@ class Node:
 
     def set_h_cost(self, e_node):
         # F_cost need to be updated also, self.f_cost = self.g_cost + self.h_cost
-        self.h_cost = int(((abs(e_node.row - self.row) * self.__class__.SideLength) ** 2) + ((abs(e_node.col - self.col) * self.__class__.SideLength) ** 2) ** 0.5)
+        self.h_cost = int(((abs(e_node.row - self.row) * self.__class__.SideLength) ** 2) + (
+                    (abs(e_node.col - self.col) * self.__class__.SideLength) ** 2) ** 0.5)
 
     # Drawing And Updating
     def mark_start(self):
@@ -132,7 +133,7 @@ class Grid:
         self.status_bar = statusbar
         self.surface.fill(bg)
 
-        self.delay = Config.VisualDelay                    # delay in each iteration of algorithm in ms
+        self.delay = Config.VisualDelay  # delay in each iteration of algorithm in ms
         self.rows, self.cols = rows, cols
 
         self.running = False
@@ -151,7 +152,7 @@ class Grid:
 
     def zoom_in(self, side_pix=2, max_side_len=60):
         if Node.SideLength < max_side_len:
-            self.surface.fill(Config.OutNormalColor)
+            self.surface.fill(Config.OutNormalColor())
 
             Node.SideLength += side_pix
             Node.Diagonal = int(1.4 * Node.SideLength)
@@ -172,7 +173,7 @@ class Grid:
 
     def zoom_out(self, side_pix=2):
         if Node.SideLength >= Config.SideLength + side_pix:
-            self.surface.fill(Config.OutNormalColor)
+            self.surface.fill(Config.OutNormalColor())
 
             Node.SideLength -= side_pix
             Node.Diagonal = int(1.4 * Node.SideLength)
@@ -326,9 +327,12 @@ class Grid:
     def _yield_neighbours(self, node):
         """ yields all possible valid neighbours """
         if Config.DiagonalMove == 0:
-            __poss = (node.row + 1, node.col), (node.row - 1, node.col), (node.row, node.col + 1), (node.row, node.col - 1)
+            __poss = (node.row + 1, node.col), (node.row - 1, node.col), (node.row, node.col + 1), (
+            node.row, node.col - 1)
         else:
-            __poss = (node.row + 1, node.col), (node.row - 1, node.col), (node.row, node.col + 1), (node.row, node.col - 1), (node.row + 1, node.col + 1), (node.row + 1, node.col - 1), (node.row - 1, node.col + 1), (node.row - 1, node.col - 1)
+            __poss = (node.row + 1, node.col), (node.row - 1, node.col), (node.row, node.col + 1), (
+            node.row, node.col - 1), (node.row + 1, node.col + 1), (node.row + 1, node.col - 1), (
+            node.row - 1, node.col + 1), (node.row - 1, node.col - 1)
 
         for _pos in __poss:
             if self.is_valid(_pos):
@@ -360,7 +364,7 @@ class Grid:
                 return None
 
             if c__node == self.end_node:
-                self.show_algo_result(c__node,  time.time() - start_t)
+                self.show_algo_result(c__node, time.time() - start_t)
                 return None
 
             self.open_nodes.remove(c__node)
@@ -405,9 +409,11 @@ class Grid:
     def show_algo_result(self, e_node, duration=0.00):
         if e_node:
             _steps = self.trace_back(e_node.parent)
-            self.status_bar.set_text(f'Process Completed !! Time elapsed : {round(duration, 3)}s || Steps Required : {_steps}', (0, 220, 0))
+            self.status_bar.set_text(
+                f'Process Completed !! Time elapsed : {round(duration, 3)}s || Steps Required : {_steps}', (0, 220, 0))
         else:
-            self.status_bar.set_text(f'Process Failed !! Time elapsed : {round(duration, 3)}s || No valid path detected', (220, 0, 0))
+            self.status_bar.set_text(
+                f'Process Failed !! Time elapsed : {round(duration, 3)}s || No valid path detected', (220, 0, 0))
         self.running = False
 
 
@@ -420,7 +426,7 @@ class StatusBar:
         self.bg = bg
         self.pady = pady
         self._height = self.height - self.pady
-        self._y = self. y + self.pady
+        self._y = self.y + self.pady
 
         self.draw()
 
@@ -441,7 +447,6 @@ def quit_():
 
 # Gui Handler
 def gui_handler():
-
     __run = True
     while __run:
         keys = pygame.key.get_pressed()
@@ -452,7 +457,7 @@ def gui_handler():
             if event.type == pygame.QUIT:
                 __run = False
                 break
-            if (keys[pygame.K_LALT] or keys[pygame.K_RALT]) and keys[pygame.K_F4]:       # Alt EVENTS ..................
+            if (keys[pygame.K_LALT] or keys[pygame.K_RALT]) and keys[pygame.K_F4]:  # Alt EVENTS ..................
                 __run = False
                 break
 
@@ -474,7 +479,7 @@ def gui_handler():
                         grid.start_algo()
                         continue
 
-                if keys[pygame.K_LCTRL] or keys[pygame.K_RCTRL]:    # CONTROL EVENTS ..................
+                if keys[pygame.K_LCTRL] or keys[pygame.K_RCTRL]:  # CONTROL EVENTS ..................
                     if keys[pygame.K_r]:
                         grid.reset_grid()
                         continue
@@ -495,9 +500,9 @@ def gui_handler():
                     elif event.button == 3:  # Right Click
                         grid.unmark_obs()
 
-                    elif event.button == 4:   # Scroll Up
+                    elif event.button == 4:  # Scroll Up
                         grid.zoom_in()
-                    elif event.button == 5:   # Scroll Down
+                    elif event.button == 5:  # Scroll Down
                         grid.zoom_out()
                     continue
 
@@ -512,12 +517,15 @@ def gui_handler():
     quit_()
 
 
+print(f"DEBUG: {type(Config.theme_dict)}")
+
 win = pygame.display.set_mode((Config.W_WIDTH, Config.W_HEIGHT))
 pygame.display.set_caption("Path Finder")
 
-grid = Grid(win, None, Config.GRID_ROWS, Config.GRID_COLS)
+grid = Grid(win, None, rows=Config.GRID_ROWS, cols=Config.GRID_COLS, bg=Node.OutNormalColor)
 
-status_bar = grid.status_bar = StatusBar(win, (Config.W_WIDTH, Config.StatusBarHeight), (0, Config.W_HEIGHT - Config.StatusBarHeight))
+status_bar = grid.status_bar = StatusBar(win, (Config.W_WIDTH, Config.StatusBarHeight),
+                                         (0, Config.W_HEIGHT - Config.StatusBarHeight))
 status_bar.set_text(text=Config.StatusInstruction, color=(30, 30, 30))
 
 gui_handler()

@@ -48,49 +48,40 @@ class Config:
     }
 
     @classmethod
-    @property
     def theme_dict(cls) -> dict:
         return cls.DarkThemeDict if cls.DarkMode else cls.LightThemeDict
 
     @classmethod
-    @property
-    def OutNormalColor(cls):
-        return cls.theme_dict['OutNormalColor']
+    def OutNormalColor(cls) -> tuple:
+        return cls.theme_dict()['OutNormalColor']
 
     @classmethod
-    @property
     def NormalFill(cls):
-        return cls.theme_dict['NormalFill']
+        return cls.theme_dict()['NormalFill']
 
     @classmethod
-    @property
     def StartFill(cls):
-        return cls.theme_dict['StartFill']
+        return cls.theme_dict()['StartFill']
 
     @classmethod
-    @property
     def EndFill(cls):
-        return cls.theme_dict['EndFill']
+        return cls.theme_dict()['EndFill']
 
     @classmethod
-    @property
     def ObsFill(cls):
-        return cls.theme_dict['ObsFill']
+        return cls.theme_dict()['ObsFill']
 
     @classmethod
-    @property
     def OpenFill(cls):
-        return cls.theme_dict['OpenFill']
+        return cls.theme_dict()['OpenFill']
 
     @classmethod
-    @property
     def ClosedFill(cls):
-        return cls.theme_dict['ClosedFill']
+        return cls.theme_dict()['ClosedFill']
 
     @classmethod
-    @property
     def PathFill(cls):
-        return cls.theme_dict['PathFill']
+        return cls.theme_dict()['PathFill']
 
 
     # Fonts
